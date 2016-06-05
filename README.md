@@ -38,7 +38,9 @@ This operator supports backpressure which means that:
 * It will also work greate if you are merging observables that have a different emission pace.
 * You can merge sort very large or infinite sorted sequences 
 
-#### Usage
+#### Usage 
+
+##### Natural Order
 
 ```java
     //You can have one or more soure observables ordered naturally
@@ -55,5 +57,32 @@ This operator supports backpressure which means that:
     
     //output:
     //[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        
+```
+
+##### Reverse Order
+
+```java
+    //You can have one or more soure observables ordered naturally
+    Observable<Integer> o1 = Observable.just(10, 8, 6, 4, 2);
+    //Observable can be truly async too
+    Observable<Integer> o2 = Observable.just(9, 7, 5, 3, 1);
+
+    //create an observable as a sequence of source observables and use lift operator to inject OperatorMergeSorted
+    Observable<Integer> merged = Observable.just(o1, o2)
+        .lift(new yurgis.rxjava.recipes.OperatorMergeSorted<Integer>(new Comparator<Integer>() {
+
+          @Override
+          public int compare(Integer o1, Integer o2) {
+            return o2.compareTo(o1);
+          }
+          
+        }));
+
+    //The merged observable will emit integers sorted in descending order
+    System.out.println(merged.toList().toBlocking().single());
+    
+    //output:
+    //[10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
         
 ```

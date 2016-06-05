@@ -28,6 +28,16 @@ and the dependency:
 
 #### Gradle
 
+```groovy
+   repositories { 
+        jcenter()
+        maven { url "https://jitpack.io" }
+   }
+   dependencies {
+         compile 'com.github.yurgis2:rxjava-recipes:v0.0.1'
+   }
+```
+
 ### OperatorMergeSorted
 
 This operator is very similar to the standard RxJava's Merge.

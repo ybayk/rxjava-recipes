@@ -60,7 +60,7 @@ This operator supports backpressure which means that:
         
 ```
 
-##### Reverse Order
+##### Custom Order
 
 ```java
     //You can have one or more soure observables ordered naturally

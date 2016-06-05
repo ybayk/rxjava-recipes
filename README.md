@@ -99,8 +99,8 @@ Works exactly like RxJava's interval, but you can pause/resume it any time durin
     Observable<Long> o = RxRecipes.pausableInterval(pause, initialDelay, period, TimeUnit.MILLISECONDS, Schedulers.computation());
     //...
     //somewhere in a middle of subscription
-    //pause.set(true); //pause
+    pause.set(true); //pause
     //...
-    //pause.set(false); //resume
+    pause.set(false); //resume
 ```
 

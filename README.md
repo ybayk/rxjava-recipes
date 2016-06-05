@@ -41,12 +41,12 @@ and the dependency:
 
 ### 1. OperatorMergeSorted
 
-This operator is very similar to the standard RxJava's MergeOperator but its implementation is loosly based on ZipOperator.
+This operator is very similar to the standard RxJava's [OperatorMerge](https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/operators/OperatorMerge.java) but its implementation is loosly based on and have the same performance characteristics as [OperatorZip](https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/operators/OperatorZip.java).
 It merges source Observables into one Observable, but does it in the order specified by the provided comparator (assuming the source Observable's have their items pre-sorted in the order consistent with the comparator). 
 
 This operator supports backpressure which means that:
 * It will not fetch data from the source observable beyond of what you request. 
-* It will also work greate if you are merging observables that have a different emission pace.
+* It will also work fine if you are merging observables that have a different emission pace.
 * You can merge sort very large or infinite sorted sequences 
 
 #### Usage 

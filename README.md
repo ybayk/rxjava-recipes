@@ -38,7 +38,7 @@ and the dependency:
    }
 ```
 
-### OperatorMergeSorted
+### 1. OperatorMergeSorted
 
 This operator is very similar to the standard RxJava's Merge.
 It merges source Observables into one Observable, but does it in the order specified by the provided comparator (assuming the source Observable's have their items pre-sorted in the order consistent with the comparator). 

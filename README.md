@@ -61,7 +61,7 @@ This operator supports backpressure which means that:
 
     //create an observable as a sequence of source observables and use lift operator to "inject" OperatorMergeSorted
     Observable<Integer> merged = Observable.just(o1, o2)
-        .lift(new yurgis.rxjava.recipes.OperatorMergeSorted<Integer>());
+        .lift(new OperatorMergeSorted<Integer>());
 
     //The merged observable will emit items sorted
     System.out.println(merged.toList().toBlocking().single());
@@ -80,7 +80,7 @@ This operator supports backpressure which means that:
 
     //create an observable as a sequence of source observables and use lift operator to inject OperatorMergeSorted
     Observable<Integer> merged = Observable.just(o1, o2)
-        .lift(new yurgis.rxjava.recipes.OperatorMergeSorted<Integer>(new Comparator<Integer>() {
+        .lift(new OperatorMergeSorted<Integer>(new Comparator<Integer>() {
 
           @Override
           public int compare(Integer o1, Integer o2) {

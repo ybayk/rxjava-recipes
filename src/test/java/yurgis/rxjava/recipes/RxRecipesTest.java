@@ -1,5 +1,6 @@
 package yurgis.rxjava.recipes;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -73,6 +74,14 @@ public class RxRecipesTest {
   }
 
   @Test
+  public void testMergeSortedTwoWithLambdaComparator() {
+    Observable<Integer> o1 = Observable.just(5, 3, 1);
+    Observable<Integer> o2 = Observable.just(6, 4, 2);
+    List<Integer> list = RxRecipes.mergeSorted(o1, o2, (v1,v2)->(v2-v1)).toList().toBlocking().single();
+    Assert.assertArrayEquals(new Integer[] {6,5,4,3,2,1}, list.toArray(new Integer[0]));
+  }
+  
+  @Test
   public void testMergeSortedThreeWithComparator() {
     Observable<Integer> o1 = Observable.just(5, 3, 1);
     Observable<Integer> o2 = Observable.just(6, 4, 2);
@@ -113,11 +122,15 @@ public class RxRecipesTest {
     List<Long> ticks2 = o.take(6).toList().toBlocking().single();
     Assert.assertArrayEquals("should start from 0L", new Long[] {0L,1L,2L,3L,4L,5L}, ticks2.toArray(new Long[0]));
     
+    List<Long> ticks3 = new ArrayList<Long>();
     List<Long> times = o.doOnNext(tick->fast.set(tick < 2))
+      .doOnNext(tick->ticks3.add(tick))
       .doOnSubscribe(()->start.set(System.currentTimeMillis()))
       .map(tick->System.currentTimeMillis() - start.get())
       .take(6)
       .toList().toBlocking().single();
+
+    Assert.assertArrayEquals(new Long[] {0L,1L,2L,3L,4L,5L}, ticks3.toArray(new Long[0]));
     
     Assert.assertTrue(times.get(0) >= 30);
     Assert.assertTrue(times.get(0) <= 100);
@@ -154,15 +167,19 @@ public class RxRecipesTest {
     Assert.assertArrayEquals("should start from 0L", new Long[] {0L,1L,2L,3L,4L,5L}, ticks.toArray(new Long[0]));
 
     List<Long> ticks2 = o.take(6).toList().toBlocking().single();
-    Assert.assertArrayEquals("should start from 0L", new Long[] {0L,1L,2L,3L,4L,5L}, ticks2.toArray(new Long[0]));
+    Assert.assertArrayEquals("should restart from 0L", new Long[] {0L,1L,2L,3L,4L,5L}, ticks2.toArray(new Long[0]));
     
     Executors.newScheduledThreadPool(1).schedule(()->{pause.set(false);}, 500, TimeUnit.MILLISECONDS);
     
+    List<Long> ticks3 = new ArrayList<Long>();
     List<Long> times = o.doOnNext(tick->pause.set(tick == 2))
+      .doOnNext(tick->ticks3.add(tick))
       .doOnSubscribe(()->start.set(System.currentTimeMillis()))
       .map(tick->System.currentTimeMillis() - start.get())
       .take(6)
       .toList().toBlocking().single();
+    
+    Assert.assertArrayEquals(new Long[] {0L,1L,2L,3L,4L,5L}, ticks3.toArray(new Long[0]));
     
     Assert.assertTrue(times.get(0) >= 30);
     Assert.assertTrue(times.get(0) <= 100);

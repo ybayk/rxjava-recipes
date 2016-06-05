@@ -10,15 +10,6 @@ targetCompatibility = 1.6
       maven {
         url = "https://clojars.org/repo/"
       }
-      maven {
-        url "http://repo.1p.thomsonreuters.com/nexus/content/repositories/thirdparty/"
-      }
-      maven {
-        url "http://repo.1p.thomsonreuters.com/nexus/content/repositories/snapshots/"
-      }
-      maven {
-        url "http://repo.1p.thomsonreuters.com/nexus/content/repositories/releases/"
-      }
     }
   
   }

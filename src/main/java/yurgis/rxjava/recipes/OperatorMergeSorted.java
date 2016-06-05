@@ -49,7 +49,7 @@ public final class OperatorMergeSorted<T> implements Operator<T, Observable<? ex
 
     /**
      * Constructs an operator that emits its elements according to their
-     * {@linkplain Comparable natural ordering}.
+     * {@linkplain Comparable} natural ordering.
      */
     public OperatorMergeSorted() {
       this.comparator = null;

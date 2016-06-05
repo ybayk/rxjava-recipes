@@ -59,9 +59,8 @@ This operator supports backpressure which means that:
     //An observable source can be truly async too - let's delay one by a second
     Observable<Integer> o2 = Observable.just(1, 3, 5, 7, 9).delay(1, TimeUnit.SECONDS);
 
-    //create an observable as a sequence of source observables and use lift operator to "inject" OperatorMergeSorted
-    Observable<Integer> merged = Observable.just(o1, o2)
-        .lift(new OperatorMergeSorted<Integer>());
+    //RxRecipes.mergeSorted() utility creates an observable as a sequence of source observables and use lift operator to "inject" OperatorMergeSorted
+    Observable<Integer> merged = RxRecipes.mergeSorted(o1, o2);
 
     //The merged observable will emit items sorted
     System.out.println(merged.toList().toBlocking().single());
@@ -78,16 +77,15 @@ This operator supports backpressure which means that:
     Observable<Integer> o1 = Observable.just(10, 8, 6, 4, 2);
     Observable<Integer> o2 = Observable.just(9, 7, 5, 3, 1);
 
-    //create an observable as a sequence of source observables and use lift operator to inject OperatorMergeSorted
-    Observable<Integer> merged = Observable.just(o1, o2)
-        .lift(new OperatorMergeSorted<Integer>(new Comparator<Integer>() {
+    //pass optional custom comparator
+    Observable<Integer> merged = RxRecipes.mergeSorted(o1, o2, new Comparator<Integer>() {
 
           @Override
           public int compare(Integer o1, Integer o2) {
             return o2.compareTo(o1);
           }
           
-        }));
+        });
 
     //The merged observable will emit integers sorted in descending order
     System.out.println(merged.toList().toBlocking().single());

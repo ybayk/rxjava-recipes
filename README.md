@@ -6,6 +6,26 @@ A small repo with reusable custom operators and utilities on top of RxJava.
 
 #### Maven
 
+To use it in your Maven build add:
+```xml
+  <repositories>
+	<repository>
+	    <id>jitpack.io</id>
+	    <url>https://jitpack.io</url>
+	</repository>
+  </repositories>
+```
+
+and the dependency:
+
+```xml
+	<dependency>
+		<groupId>com.github.yurgis2</groupId>
+		<artifactId>rxjava-recipes</artifactId>
+		<version>v0.0.1</version>
+	</dependency>
+```
+
 #### Gradle
 
 ### OperatorMergeSorted

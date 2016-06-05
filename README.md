@@ -1,6 +1,7 @@
 # RxJavaRecipes
 
 A small repo with reusable custom operators and utilities on top of RxJava.
+It depends only on https://github.com/ReactiveX/RxJava and compatible with Java 6+.
 
 ### Include as a depenency to your project
 
@@ -40,7 +41,7 @@ and the dependency:
 
 ### 1. OperatorMergeSorted
 
-This operator is very similar to the standard RxJava's Merge.
+This operator is very similar to the standard RxJava's MergeOperator but its implementation is loosly based on ZipOperator.
 It merges source Observables into one Observable, but does it in the order specified by the provided comparator (assuming the source Observable's have their items pre-sorted in the order consistent with the comparator). 
 
 This operator supports backpressure which means that:
@@ -55,10 +56,10 @@ This operator supports backpressure which means that:
 ```java
     //You can have one or more soure observables ordered naturally
     Observable<Integer> o1 = Observable.just(2, 4, 6, 8, 10);
-    //Observable can be truly async too
+    //An observable source can be truly async too - let's delay one by a second
     Observable<Integer> o2 = Observable.just(1, 3, 5, 7, 9).delay(1, TimeUnit.SECONDS);
 
-    //create an observable as a sequence of source observables and use lift operator to inject OperatorMergeSorted
+    //create an observable as a sequence of source observables and use lift operator to "inject" OperatorMergeSorted
     Observable<Integer> merged = Observable.just(o1, o2)
         .lift(new yurgis.rxjava.recipes.OperatorMergeSorted<Integer>());
 

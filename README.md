@@ -73,9 +73,8 @@ This operator supports backpressure which means that:
 ##### Custom Order
 
 ```java
-    //You can have one or more soure observables ordered naturally
+    //each source observable is expected to have a sort order consistent with the custom comparator:
     Observable<Integer> o1 = Observable.just(10, 8, 6, 4, 2);
-    //Observable can be truly async too
     Observable<Integer> o2 = Observable.just(9, 7, 5, 3, 1);
 
     //create an observable as a sequence of source observables and use lift operator to inject OperatorMergeSorted

@@ -1,8 +1,14 @@
 package yurgis.rxjava.recipes;
 
 import java.util.Comparator;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 import rx.Observable;
+import rx.Scheduler;
+import rx.functions.Func1;
+import rx.functions.Func2;
 
 /**
  * Misc Utilities
@@ -177,6 +183,112 @@ public class RxRecipes {
    */
   public static <T> Observable<T> mergeSorted(Observable<Observable<T>> sources, Comparator<T> comparator) {
     return sources.lift(new OperatorMergeSorted<T>(comparator));
+  }
+
+  /**
+   * Returns an Observable that emits a {@code 0L} after the {@code initialDelay} and ever increasing numbers
+   * after each {@code fastPeriod} or {@code slowPeriod} (depending on {@code fast} flag value) of time thereafter, 
+   * on a specified {@link Scheduler}.
+   * <dl>
+   *  <dt><b>Backpressure Support:</b></dt>
+   *  <dd>This operator does not support backpressure as it uses time. If the downstream needs a slower rate
+   *      it should slow the timer or use something like {@link Observable#onBackpressureDrop()}.</dd>
+   *  <dt><b>Scheduler:</b></dt>
+   *  <dd>you specify which {@link Scheduler} this operator will use</dd>
+   * </dl>
+   * 
+   * @param fast
+   *          mutable flag indicating whether the timer emits in fast mode ({@code true}) or slow mode ({@code false})
+   * @param initialDelay
+   *          the initial delay time to wait before emitting the first value of 0L
+   * @param fastPeriod
+   *          the period of time between emissions of the subsequent numbers in fast mode. 
+   *          Should be less than {@code slowPeriod}
+   * @param slowPeriod
+   *          the period of time between emissions of the subsequent numbers in slow mode.
+   *          Should be greater than {@code fastPeriod}
+   * @param unit
+   *          the time unit for both {@code initialDelay}, {@code slowPeriod}, and {@code fastPeriod}
+   * @param scheduler
+   *          the Scheduler on which the waiting happens and items are emitted
+   * 
+   * @return a new fast/slow interval observable
+   */
+  public static Observable<Long> fastSlowInterval(final AtomicBoolean fast, final int initialDelay,
+      final long fastPeriod, final long slowPeriod, TimeUnit unit, Scheduler scheduler) {
+
+    if (fastPeriod >= slowPeriod) {
+      throw new IllegalArgumentException("slow period should be greater than fast");
+    }
+    return Observable.merge(
+        Observable.interval(initialDelay, slowPeriod, unit, scheduler).filter(new Func1<Long, Boolean>() {
+
+          @Override
+          public Boolean call(Long tick) {
+            return !fast.get();
+          }
+
+        }), Observable.interval(initialDelay, fastPeriod, unit, scheduler).filter(new Func1<Long, Boolean>() {
+
+          @Override
+          public Boolean call(Long tick) {
+            return fast.get();
+          }
+
+        })).scan(new Func2<Long,Long,Long>() {
+
+          @Override
+          public Long call(Long acc, Long tick) {
+            return acc + 1;
+          }
+          
+        });
+  }
+
+  /**
+   * Returns an Observable that emits a {@code 0L} after the {@code initialDelay} and ever increasing numbers
+   * after each {@code period} of time thereafter, 
+   * on a specified {@link Scheduler} as long as {@code pause} flag holds {@code false}.
+   * <dl>
+   *  <dt><b>Backpressure Support:</b></dt>
+   *  <dd>This operator does not support backpressure as it uses time. If the downstream needs a slower rate
+   *      it should slow the timer or use something like {@link Observable#onBackpressureDrop}.</dd>
+   *  <dt><b>Scheduler:</b></dt>
+   *  <dd>you specify which {@link Scheduler} this operator will use</dd>
+   * </dl>
+   * 
+   * @param pause
+   *          mutable flag indicating whether the emission is paused or not
+   *          emitting
+   * @param initialDelay
+   *          the initial delay time to wait before emitting the first value of 0L
+   * @param period
+   *          the period of time between emissions of the subsequent numbers
+   * @param unit
+   *          the time unit for both {@code initialDelay}, {@code slowPeriod}, and {@code fastPeriod}
+   * @param scheduler
+   *          the Scheduler on which the waiting happens and items are emitted
+   * 
+   * @return a new pausable interval observable
+   */
+  public static final Observable<Long> pausableInterval(final AtomicBoolean pause, final long initialDelay, 
+      final long period, TimeUnit unit, Scheduler scheduler) {
+
+    return Observable.interval(initialDelay, period, unit, scheduler).filter(new Func1<Long, Boolean>() {
+
+      @Override
+      public Boolean call(Long tick) {
+        return !pause.get();
+      }
+
+    }).scan(new Func2<Long,Long,Long>() {
+
+      @Override
+      public Long call(Long acc, Long tick) {
+        return acc + 1;
+      }
+      
+    });
   }
 
 }

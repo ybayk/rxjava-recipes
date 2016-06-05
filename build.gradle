@@ -1,37 +1,33 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
+compileJava {
+    sourceCompatibility = 1.6
+		targetCompatibility = 1.6
+}
+compileTestJava {
+    sourceCompatibility = 1.8
+		targetCompatibility = 1.8
+}
 
-  buildscript {
-    repositories {
-      jcenter()
-      maven {
-        url = "https://clojars.org/repo/"
-      }
-      maven {
-        url "http://repo.1p.thomsonreuters.com/nexus/content/repositories/thirdparty/"
-      }
-      maven {
-        url "http://repo.1p.thomsonreuters.com/nexus/content/repositories/snapshots/"
-      }
-      maven {
-        url "http://repo.1p.thomsonreuters.com/nexus/content/repositories/releases/"
-      }
-    }
-  
-  }
-  
+buildscript {
   repositories {
     jcenter()
     maven {
-      url 'http://clojars.org/repo'
-    }
-    maven {
-      url 'https://oss.sonatype.org/content/groups/public'
+      url = "https://clojars.org/repo/"
     }
   }
+}
+
+repositories {
+  jcenter()
+  maven {
+    url 'http://clojars.org/repo'
+  }
+  maven {
+    url 'https://oss.sonatype.org/content/groups/public'
+  }
+}
 
 dependencies {
   compile group: 'io.reactivex', name: 'rxjava', version: '1.0.14'

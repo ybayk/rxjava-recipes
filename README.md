@@ -41,7 +41,7 @@ and the dependency:
 
 ### 1. OperatorMergeSorted
 
-This operator is very similar to the standard RxJava's [OperatorMerge](https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/operators/OperatorMerge.java) but its implementation is loosly based on and have the same performance characteristics as [OperatorZip](https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/operators/OperatorZip.java).
+This [operator](https://github.com/yurgis2/rxjava-recipes/blob/master/src/main/java/yurgis/rxjava/recipes/OperatorMergeSorted.java) is very similar to the standard RxJava's [OperatorMerge](https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/operators/OperatorMerge.java) but its implementation is loosly based on and have the same performance characteristics as [OperatorZip](https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/operators/OperatorZip.java).
 It merges source Observables into one Observable, but does it in the order specified by the provided comparator (assuming the source Observable's have their items pre-sorted in the order consistent with the comparator). 
 
 This operator supports backpressure which means that:
@@ -78,14 +78,7 @@ This operator supports backpressure which means that:
     Observable<Integer> o2 = Observable.just(9, 7, 5, 3, 1);
 
     //pass optional custom comparator
-    Observable<Integer> merged = RxRecipes.mergeSorted(o1, o2, new Comparator<Integer>() {
-
-          @Override
-          public int compare(Integer o1, Integer o2) {
-            return o2.compareTo(o1);
-          }
-          
-        });
+    Observable<Integer> merged = RxRecipes.mergeSorted(o1, o2, (v1, v2)->(v2 - v1));
 
     //The merged observable will emit integers sorted in descending order
     System.out.println(merged.toList().toBlocking().single());
@@ -94,3 +87,20 @@ This operator supports backpressure which means that:
     //[10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
         
 ```
+
+### 2. Pausable Interval
+
+Works exactly like RxJava's interval, but you can pause/resume it any time during subscription:
+
+```java
+    AtomicBoolean pause = new AtomicBoolean(false);
+    long initialDelay = 50;
+    long period = 100;
+    Observable<Long> o = RxRecipes.pausableInterval(pause, initialDelay, period, TimeUnit.MILLISECONDS, Schedulers.computation());
+    //...
+    //somewhere in a middle of subscription
+    //pause.set(true); //pause
+    //...
+    //pause.set(false); //resume
+```
+

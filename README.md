@@ -122,7 +122,7 @@ Interval that can emit in a fast or a slow pace:
     long initialDelay = 50;
     long fastPeriod = 100;
     long slowPeriod = 300;
-    Observable<Long> o = RxRecipes.fastSlowInterval(pause, initialDelay, fastPeriod, slowPeriod, TimeUnit.MILLISECONDS, Schedulers.computation());
+    Observable<Long> o = RxRecipes.fastSlowInterval(fast, initialDelay, fastPeriod, slowPeriod, TimeUnit.MILLISECONDS, Schedulers.computation());
     //...
     //somewhere in a middle of subscription
     fast.set(true); //emit faster

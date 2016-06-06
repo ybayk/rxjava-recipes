@@ -9,6 +9,7 @@ import rx.Observable;
 import rx.Scheduler;
 import rx.functions.Func1;
 import rx.functions.Func2;
+import rx.schedulers.Schedulers;
 
 /**
  * Misc Utilities
@@ -214,7 +215,7 @@ public class RxRecipes {
    * 
    * @return a new fast/slow interval observable
    */
-  public static Observable<Long> fastSlowInterval(final AtomicBoolean fast, final int initialDelay,
+  public static Observable<Long> fastSlowInterval(final AtomicBoolean fast, final long initialDelay,
       final long fastPeriod, final long slowPeriod, TimeUnit unit, Scheduler scheduler) {
 
     if (fastPeriod >= slowPeriod) {
@@ -245,6 +246,74 @@ public class RxRecipes {
         });
   }
 
+  /**
+   * Same as calling {@link #fastSlowInterval(AtomicBoolean, long, long, long, TimeUnit, Scheduler)} 
+   * with {@code initialDelay == fast.get()? fastPeriod : slowPeriod}
+   * @param fast
+   *          mutable flag indicating whether the timer emits in fast mode ({@code true}) or slow mode ({@code false})
+   * @param fastPeriod
+   *          the period of time between emissions of the subsequent numbers in fast mode. 
+   *          Should be less than {@code slowPeriod}
+   * @param slowPeriod
+   *          the period of time between emissions of the subsequent numbers in slow mode.
+   *          Should be greater than {@code fastPeriod}
+   * @param unit
+   *          the time unit for both {@code initialDelay}, {@code slowPeriod}, and {@code fastPeriod}
+   * @param scheduler
+   *          the Scheduler on which the waiting happens and items are emitted
+   * 
+   * @return a new fast/slow interval observable
+   */
+  public static Observable<Long> fastSlowInterval(final AtomicBoolean fast, 
+      final long fastPeriod, final long slowPeriod, TimeUnit unit, Scheduler scheduler) {
+    return fastSlowInterval(fast, fast.get()? fastPeriod : slowPeriod, fastPeriod, slowPeriod, unit, scheduler);
+  }  
+
+  /**
+   * Same as calling {@link #fastSlowInterval(AtomicBoolean, long, long, TimeUnit, Scheduler)} 
+   * with {@code scheduler == }{@link Schedulers#computation()}
+   * @param fast
+   *          mutable flag indicating whether the timer emits in fast mode ({@code true}) or slow mode ({@code false})
+   * @param fastPeriod
+   *          the period of time between emissions of the subsequent numbers in fast mode. 
+   *          Should be less than {@code slowPeriod}
+   * @param slowPeriod
+   *          the period of time between emissions of the subsequent numbers in slow mode.
+   *          Should be greater than {@code fastPeriod}
+   * @param unit
+   *          the time unit for both {@code initialDelay}, {@code slowPeriod}, and {@code fastPeriod}
+   * 
+   * @return a new fast/slow interval observable
+   */
+  public static Observable<Long> fastSlowInterval(final AtomicBoolean fast, 
+      final long fastPeriod, final long slowPeriod, TimeUnit unit) {
+    return fastSlowInterval(fast, fastPeriod, slowPeriod, unit, Schedulers.computation());
+  }  
+  
+  /**
+   * Same as calling {@link #fastSlowInterval(AtomicBoolean, long, long, long, TimeUnit, Scheduler)} 
+   * with {@code scheduler == }{@link Schedulers#computation()}
+   * @param fast
+   *          mutable flag indicating whether the timer emits in fast mode ({@code true}) or slow mode ({@code false})
+   * @param initialDelay
+   *          the initial delay time to wait before emitting the first value of 0L
+   * @param fastPeriod
+   *          the period of time between emissions of the subsequent numbers in fast mode. 
+   *          Should be less than {@code slowPeriod}
+   * @param slowPeriod
+   *          the period of time between emissions of the subsequent numbers in slow mode.
+   *          Should be greater than {@code fastPeriod}
+   * @param unit
+   *          the time unit for both {@code initialDelay}, {@code slowPeriod}, and {@code fastPeriod}
+   * 
+   * @return a new fast/slow interval observable
+   */
+  public static Observable<Long> fastSlowInterval(final AtomicBoolean fast, final long initialDelay,
+      final long fastPeriod, final long slowPeriod, TimeUnit unit) {
+    return fastSlowInterval(fast, initialDelay, fastPeriod, slowPeriod, unit, Schedulers.computation());
+
+  }
+  
   /**
    * Returns an Observable that emits a {@code 0L} after the {@code initialDelay} and ever increasing numbers
    * after each {@code period} of time thereafter, 
@@ -291,4 +360,66 @@ public class RxRecipes {
     });
   }
 
+  /**
+   * Same as calling {@link #pausableInterval(AtomicBoolean, long, long, TimeUnit, Scheduler)}
+   * with {@code initialDelay == period}
+   * 
+   * @param pause
+   *          mutable flag indicating whether the emission is paused or not
+   *          emitting
+   * @param period
+   *          the period of time between emissions of the subsequent numbers
+   * @param unit
+   *          the time unit for both {@code initialDelay}, {@code slowPeriod}, and {@code fastPeriod}
+   * @param scheduler
+   *          the Scheduler on which the waiting happens and items are emitted
+   * 
+   * @return a new pausable interval observable
+   */
+  public static final Observable<Long> pausableInterval(final AtomicBoolean pause, 
+      final long period, TimeUnit unit, Scheduler scheduler) {
+    return pausableInterval(pause, period, period, unit, scheduler);
+  }  
+
+
+  /**
+   * Same as calling {@link #pausableInterval(AtomicBoolean, long, TimeUnit, Scheduler)}
+   * with {@code scheduler == }{@link Schedulers#computation()}
+   * 
+   * @param pause
+   *          mutable flag indicating whether the emission is paused or not
+   *          emitting
+   * @param period
+   *          the period of time between emissions of the subsequent numbers
+   * @param unit
+   *          the time unit for both {@code initialDelay}, {@code slowPeriod}, and {@code fastPeriod}
+    * 
+   * @return a new pausable interval observable
+   */
+  public static final Observable<Long> pausableInterval(final AtomicBoolean pause, 
+      final long period, TimeUnit unit) {
+    return pausableInterval(pause, period, unit, Schedulers.computation());
+  }
+  
+  /**
+   * Same as calling {@link #pausableInterval(AtomicBoolean, long, long, TimeUnit, Scheduler)}
+   * with {@code scheduler == }{@link Schedulers#computation()}
+   * 
+   * @param pause
+   *          mutable flag indicating whether the emission is paused or not
+   *          emitting
+   * @param initialDelay
+   *          the initial delay time to wait before emitting the first value of 0L
+   * @param period
+   *          the period of time between emissions of the subsequent numbers
+   * @param unit
+   *          the time unit for both {@code initialDelay}, {@code slowPeriod}, and {@code fastPeriod}
+   * 
+   * @return a new pausable interval observable
+   */
+  public static final Observable<Long> pausableInterval(final AtomicBoolean pause, final long initialDelay, 
+      final long period, TimeUnit unit) {
+    return pausableInterval(pause, initialDelay, period, unit, Schedulers.computation());
+  }  
+  
 }

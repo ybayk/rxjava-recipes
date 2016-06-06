@@ -12,6 +12,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import rx.Observable;
+import rx.Scheduler;
+import rx.functions.Func1;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 public class RxRecipesTest {
@@ -110,11 +113,8 @@ public class RxRecipesTest {
     Assert.assertArrayEquals(new Integer[] {9,8,7,6,5,4,3,2,1,-1,-2,-3}, list.toArray(new Integer[0]));
   }
  
-  @Test
-  public void testFastSlowInterval() {
-    AtomicBoolean fast = new AtomicBoolean(true);
-    Observable<Long> o = RxRecipes.fastSlowInterval(fast, 50, 100, 300, TimeUnit.MILLISECONDS, Schedulers.computation());
-    AtomicLong start = new AtomicLong();
+  public void testFastSlowInterval(AtomicBoolean fast, Observable<Long> o, long initial, long fastPeriod, long slowPeriod) {
+     AtomicLong start = new AtomicLong();
     
     List<Long> ticks = o.take(6).toList().toBlocking().single();
     Assert.assertArrayEquals("should start from 0L", new Long[] {0L,1L,2L,3L,4L,5L}, ticks.toArray(new Long[0]));
@@ -132,47 +132,70 @@ public class RxRecipesTest {
 
     Assert.assertArrayEquals(new Long[] {0L,1L,2L,3L,4L,5L}, ticks3.toArray(new Long[0]));
     
-    Assert.assertTrue(times.get(0) >= 30);
-    Assert.assertTrue(times.get(0) <= 100);
+    Assert.assertTrue(times.get(0) >= initial/2);
+    Assert.assertTrue(times.get(0) <= initial*2);
     
     //fast
-    Assert.assertTrue(times.get(1) - times.get(0) >= 80);
-    Assert.assertTrue(times.get(1) - times.get(0) <= 120);
+    Assert.assertTrue(times.get(1) - times.get(0) >= fastPeriod/2);
+    Assert.assertTrue(times.get(1) - times.get(0) <= fastPeriod*2);
     
     //fast
-    Assert.assertTrue(times.get(2) - times.get(1) >= 80);
-    Assert.assertTrue(times.get(2) - times.get(1) <= 120);
+    Assert.assertTrue(times.get(2) - times.get(1) >= fastPeriod/2);
+    Assert.assertTrue(times.get(2) - times.get(1) <= fastPeriod*2);
     
     //transitional
-    Assert.assertTrue(times.get(3) - times.get(2) >= 80);
-    Assert.assertTrue(times.get(3) - times.get(2) <= 320);
+    Assert.assertTrue(times.get(3) - times.get(2) >= fastPeriod/2);
+    Assert.assertTrue(times.get(3) - times.get(2) <= slowPeriod*2);
     
     //slow
-    Assert.assertTrue(times.get(4) - times.get(3) >= 280);
-    Assert.assertTrue(times.get(4) - times.get(3) <= 320);
+    Assert.assertTrue(times.get(4) - times.get(3) >= slowPeriod/2);
+    Assert.assertTrue(times.get(4) - times.get(3) <= slowPeriod*2);
     
     //slow
-    Assert.assertTrue(times.get(5) - times.get(4) >= 280);
-    Assert.assertTrue(times.get(5) - times.get(4) <= 320);
+    Assert.assertTrue(times.get(5) - times.get(4) >= slowPeriod/2);
+    Assert.assertTrue(times.get(5) - times.get(4) <= slowPeriod*2);
+  }
+  
+  @Test
+  public void testFastSlowInterval() {
+    AtomicBoolean fast = new AtomicBoolean(true);
+    Observable<Long> o = RxRecipes.fastSlowInterval(fast, 50, 100, 300, TimeUnit.MILLISECONDS, Schedulers.computation());
+    testFastSlowInterval(fast, o, 50, 100, 300);
   }
 
+  @Test
+  public void testFastSlowIntervalDefaultScheduler() {
+    AtomicBoolean fast = new AtomicBoolean(true);
+    Observable<Long> o = RxRecipes.fastSlowInterval(fast, 50, 100, 300, TimeUnit.MILLISECONDS);
+    testFastSlowInterval(fast, o, 50, 100, 300);
+  }
 
   @Test
-  public void testPausableInterval() {
-    AtomicBoolean pause = new AtomicBoolean(false);
-    Observable<Long> o = RxRecipes.pausableInterval(pause, 50, 100, TimeUnit.MILLISECONDS, Schedulers.computation());
+  public void testFastSlowIntervalDefaultInitial() {
+    AtomicBoolean fast = new AtomicBoolean(true);
+    Observable<Long> o = RxRecipes.fastSlowInterval(fast, 100, 300, TimeUnit.MILLISECONDS, Schedulers.computation());
+    testFastSlowInterval(fast, o, 100, 100, 300);
+  }
+
+  @Test
+  public void testFastSlowIntervalDefaultInitialAndScheduler() {
+    AtomicBoolean fast = new AtomicBoolean(true);
+    Observable<Long> o = RxRecipes.fastSlowInterval(fast, 100, 300, TimeUnit.MILLISECONDS);
+    testFastSlowInterval(fast, o, 100, 100, 300);
+  }
+  
+  public void testPausableInterval(Observable<Long> o, AtomicBoolean pause, long initial, long period) {
     AtomicLong start = new AtomicLong();
-    
     List<Long> ticks = o.take(6).toList().toBlocking().single();
     Assert.assertArrayEquals("should start from 0L", new Long[] {0L,1L,2L,3L,4L,5L}, ticks.toArray(new Long[0]));
 
     List<Long> ticks2 = o.take(6).toList().toBlocking().single();
     Assert.assertArrayEquals("should restart from 0L", new Long[] {0L,1L,2L,3L,4L,5L}, ticks2.toArray(new Long[0]));
     
-    Executors.newScheduledThreadPool(1).schedule(()->{pause.set(false);}, 500, TimeUnit.MILLISECONDS);
+    Executors.newScheduledThreadPool(1).schedule(()->{pause.set(false);}, period * 5, TimeUnit.MILLISECONDS);
     
     List<Long> ticks3 = new ArrayList<Long>();
-    List<Long> times = o.doOnNext(tick->pause.set(tick == 2))
+    List<Long> times = o.doOnNext(tick->pause.set(tick == 2)) //set pause at second tick
       .doOnNext(tick->ticks3.add(tick))
       .doOnSubscribe(()->start.set(System.currentTimeMillis()))
       .map(tick->System.currentTimeMillis() - start.get())
@@ -181,27 +204,60 @@ public class RxRecipesTest {
     
     Assert.assertArrayEquals(new Long[] {0L,1L,2L,3L,4L,5L}, ticks3.toArray(new Long[0]));
     
-    Assert.assertTrue(times.get(0) >= 30);
-    Assert.assertTrue(times.get(0) <= 100);
+    Assert.assertTrue(times.get(0) >= initial / 2);
+    Assert.assertTrue(times.get(0) <= initial * 2);
     
     //no pause
-    Assert.assertTrue(times.get(1) - times.get(0) >= 80);
-    Assert.assertTrue(times.get(1) - times.get(0) <= 120);
+    Assert.assertTrue(times.get(1) - times.get(0) >= period / 2);
+    Assert.assertTrue(times.get(1) - times.get(0) <= period * 2);
     
     //before pause
-    Assert.assertTrue(times.get(2) - times.get(1) >= 80);
-    Assert.assertTrue(times.get(2) - times.get(1) <= 120);
+    Assert.assertTrue(times.get(2) - times.get(1) >= period / 2);
+    Assert.assertTrue(times.get(2) - times.get(1) <= period * 2);
     
     //after pause
-    Assert.assertTrue(times.get(3) - times.get(2) >= 280);
-    Assert.assertTrue(times.get(3) - times.get(2) <= 320);
+    Assert.assertTrue(times.get(3) - times.get(2) >= (period * 5 - (initial + period * 2)) / 2);
+    Assert.assertTrue(times.get(3) - times.get(2) <= (period * 5 - (initial + period * 2)) * 2);
 
     //no pause
-    Assert.assertTrue(times.get(4) - times.get(3) >= 80);
-    Assert.assertTrue(times.get(4) - times.get(3) <= 120);
+    Assert.assertTrue(times.get(4) - times.get(3) >= period / 2);
+    Assert.assertTrue(times.get(4) - times.get(3) <= period * 2);
     
     //no pause
-    Assert.assertTrue(times.get(5) - times.get(4) >= 80);
-    Assert.assertTrue(times.get(5) - times.get(4) <= 120);
+    Assert.assertTrue(times.get(5) - times.get(4) >= period / 2);
+    Assert.assertTrue(times.get(5) - times.get(4) <= period * 2);
+    
+    
+    
+  }
+  
+  
+  @Test
+  public void testPausableInterval() {
+    AtomicBoolean pause = new AtomicBoolean(false);
+    Observable<Long> o = RxRecipes.pausableInterval(pause, 50, 100, TimeUnit.MILLISECONDS, Schedulers.computation());
+    testPausableInterval(o, pause, 50, 100);
+  }
+  
+  @Test
+  public void testPausableIntervalDefaultScheduler() {
+    AtomicBoolean pause = new AtomicBoolean(false);
+    Observable<Long> o = RxRecipes.pausableInterval(pause, 50, 100, TimeUnit.MILLISECONDS);
+    testPausableInterval(o, pause, 50, 100);
+  }
+  
+  @Test
+  public void testPausableIntervalDefaultInitial() {
+    AtomicBoolean pause = new AtomicBoolean(false);
+    Observable<Long> o = RxRecipes.pausableInterval(pause, 100, TimeUnit.MILLISECONDS, Schedulers.computation());
+    testPausableInterval(o, pause, 100, 100);
+  }
+
+  
+  @Test
+  public void testPausableIntervalDefaultInitialAndScheduler() {
+    AtomicBoolean pause = new AtomicBoolean(false);
+    Observable<Long> o = RxRecipes.pausableInterval(pause, 100, TimeUnit.MILLISECONDS);
+    testPausableInterval(o, pause, 100, 100);
   }
 }

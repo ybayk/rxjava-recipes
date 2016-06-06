@@ -1,14 +1,16 @@
 # RxJavaRecipes
 
+A small repo with reusable custom operators and utilities on top of RxJava.
+It depends only on https://github.com/ReactiveX/RxJava and compatible with Java 6+.
+
+
 ##### Table of Contents  
+[Set up as a dependency](#setupdependency)  
 [OperatorMergeSorted](#operatormergesorted)  
 [Pausable Interval](#pausableinterval)  
 [Fast/Slow Interval](#fastslowinterval)  
 
-
-A small repo with reusable custom operators and utilities on top of RxJava.
-It depends only on https://github.com/ReactiveX/RxJava and compatible with Java 6+.
-
+<a name="setupdependency"/>
 ### Include as a depenency to your project
 
 #### Maven

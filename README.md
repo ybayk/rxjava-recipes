@@ -3,6 +3,7 @@
 ##### Table of Contents  
 [OperatorMergeSorted](#operatormergesorted)  
 [Pausable Interval](#pausableinterval)  
+[Fast/Slow Interval](#fastslowinterval)  
 
 
 A small repo with reusable custom operators and utilities on top of RxJava.
@@ -109,5 +110,23 @@ Works exactly like RxJava's interval, but you can pause/resume it any time durin
     pause.set(true); //pause
     //...
     pause.set(false); //resume
+```
+
+<a name="fastslowinterval"/>
+### 2. Fast/Slow Interval
+
+Interval that can emit in a fast or a slow pace:
+
+```java
+    AtomicBoolean fast = new AtomicBoolean(false);
+    long initialDelay = 50;
+    long fastPeriod = 100;
+    long slowPeriod = 300;
+    Observable<Long> o = RxRecipes.fastSlowInterval(pause, initialDelay, fastPeriod, slowPeriod, TimeUnit.MILLISECONDS, Schedulers.computation());
+    //...
+    //somewhere in a middle of subscription
+    fast.set(true); //emit faster
+    //...
+    fast.set(false); //emit slower
 ```
 

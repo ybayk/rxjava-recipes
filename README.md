@@ -23,7 +23,7 @@ and the dependency:
 	<dependency>
 		<groupId>com.github.yurgis2</groupId>
 		<artifactId>rxjava-recipes</artifactId>
-		<version>v0.0.1</version>
+		<version>v0.0.2</version>
 	</dependency>
 ```
 
@@ -35,7 +35,7 @@ and the dependency:
         maven { url "https://jitpack.io" }
    }
    dependencies {
-         compile 'com.github.yurgis2:rxjava-recipes:v0.0.1'
+         compile 'com.github.yurgis2:rxjava-recipes:v0.0.2'
    }
 ```
 

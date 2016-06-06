@@ -1,5 +1,10 @@
 # RxJavaRecipes
 
+##### Table of Contents  
+[OperatorMergeSorted](#operatormergesorted)  
+[Pausable Interval](#pausableinterval)  
+
+
 A small repo with reusable custom operators and utilities on top of RxJava.
 It depends only on https://github.com/ReactiveX/RxJava and compatible with Java 6+.
 
@@ -39,6 +44,7 @@ and the dependency:
    }
 ```
 
+<a name="operatormergesorted"/>
 ### 1. OperatorMergeSorted
 
 This [operator](https://github.com/yurgis2/rxjava-recipes/blob/master/src/main/java/yurgis/rxjava/recipes/OperatorMergeSorted.java) is very similar to the standard RxJava's [OperatorMerge](https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/operators/OperatorMerge.java) but its implementation is loosly based on and have the same performance characteristics as [OperatorZip](https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/operators/OperatorZip.java).
@@ -88,6 +94,7 @@ This operator supports backpressure which means that:
         
 ```
 
+<a name="pausableinterval"/>
 ### 2. Pausable Interval
 
 Works exactly like RxJava's interval, but you can pause/resume it any time during subscription:

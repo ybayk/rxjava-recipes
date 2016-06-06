@@ -19,6 +19,7 @@ import rx.schedulers.Schedulers;
 
 public class RxRecipesTest {
 
+  static final int EPSILON = 50;
 
   final static Comparator<Integer> reverseComparator = new Comparator<Integer>() {
 
@@ -132,28 +133,28 @@ public class RxRecipesTest {
 
     Assert.assertArrayEquals(new Long[] {0L,1L,2L,3L,4L,5L}, ticks3.toArray(new Long[0]));
     
-    Assert.assertTrue(times.get(0) >= initial/2);
-    Assert.assertTrue(times.get(0) <= initial*2);
+    Assert.assertTrue(times.get(0) >= initial - EPSILON);
+    Assert.assertTrue(times.get(0) <= initial + EPSILON);
     
     //fast
-    Assert.assertTrue(times.get(1) - times.get(0) >= fastPeriod/2);
-    Assert.assertTrue(times.get(1) - times.get(0) <= fastPeriod*2);
+    Assert.assertTrue(times.get(1) - times.get(0) >= fastPeriod-EPSILON);
+    Assert.assertTrue(times.get(1) - times.get(0) <= fastPeriod+EPSILON);
     
     //fast
-    Assert.assertTrue(times.get(2) - times.get(1) >= fastPeriod/2);
-    Assert.assertTrue(times.get(2) - times.get(1) <= fastPeriod*2);
+    Assert.assertTrue(times.get(2) - times.get(1) >= fastPeriod-EPSILON);
+    Assert.assertTrue(times.get(2) - times.get(1) <= fastPeriod+EPSILON);
     
     //transitional
-    Assert.assertTrue(times.get(3) - times.get(2) >= fastPeriod/2);
-    Assert.assertTrue(times.get(3) - times.get(2) <= slowPeriod*2);
+    Assert.assertTrue(times.get(3) - times.get(2) >= fastPeriod-EPSILON);
+    Assert.assertTrue(times.get(3) - times.get(2) <= slowPeriod+EPSILON);
     
     //slow
-    Assert.assertTrue(times.get(4) - times.get(3) >= slowPeriod/2);
-    Assert.assertTrue(times.get(4) - times.get(3) <= slowPeriod*2);
+    Assert.assertTrue(times.get(4) - times.get(3) >= slowPeriod-EPSILON);
+    Assert.assertTrue(times.get(4) - times.get(3) <= slowPeriod+EPSILON);
     
     //slow
-    Assert.assertTrue(times.get(5) - times.get(4) >= slowPeriod/2);
-    Assert.assertTrue(times.get(5) - times.get(4) <= slowPeriod*2);
+    Assert.assertTrue(times.get(5) - times.get(4) >= slowPeriod-EPSILON);
+    Assert.assertTrue(times.get(5) - times.get(4) <= slowPeriod+EPSILON);
   }
   
   @Test
@@ -191,41 +192,41 @@ public class RxRecipesTest {
 
     List<Long> ticks2 = o.take(6).toList().toBlocking().single();
     Assert.assertArrayEquals("should restart from 0L", new Long[] {0L,1L,2L,3L,4L,5L}, ticks2.toArray(new Long[0]));
-    
-    Executors.newScheduledThreadPool(1).schedule(()->{pause.set(false);}, period * 5, TimeUnit.MILLISECONDS);
-    
+        
     List<Long> ticks3 = new ArrayList<Long>();
-    List<Long> times = o.doOnNext(tick->pause.set(tick == 2)) //set pause at second tick
+    List<Long> times = o.doOnNext(tick->pause.set(tick == 2)) //set pause on a second tick
       .doOnNext(tick->ticks3.add(tick))
       .doOnSubscribe(()->start.set(System.currentTimeMillis()))
+      //schedule resume
+      .doOnSubscribe(()->Executors.newScheduledThreadPool(1).schedule(()->{pause.set(false);}, initial + period * 4, TimeUnit.MILLISECONDS))
       .map(tick->System.currentTimeMillis() - start.get())
       .take(6)
       .toList().toBlocking().single();
     
     Assert.assertArrayEquals(new Long[] {0L,1L,2L,3L,4L,5L}, ticks3.toArray(new Long[0]));
     
-    Assert.assertTrue(times.get(0) >= initial / 2);
-    Assert.assertTrue(times.get(0) <= initial * 2);
+    Assert.assertTrue(times.get(0) >= initial - EPSILON);
+    Assert.assertTrue(times.get(0) <= initial + EPSILON);
     
     //no pause
-    Assert.assertTrue(times.get(1) - times.get(0) >= period / 2);
-    Assert.assertTrue(times.get(1) - times.get(0) <= period * 2);
+    Assert.assertTrue(times.get(1) - times.get(0) >= period - EPSILON);
+    Assert.assertTrue(times.get(1) - times.get(0) <= period + EPSILON);
     
     //before pause
-    Assert.assertTrue(times.get(2) - times.get(1) >= period / 2);
-    Assert.assertTrue(times.get(2) - times.get(1) <= period * 2);
+    Assert.assertTrue(times.get(2) - times.get(1) >= period - EPSILON);
+    Assert.assertTrue(times.get(2) - times.get(1) <= period + EPSILON);
     
     //after pause
-    Assert.assertTrue(times.get(3) - times.get(2) >= (period * 5 - (initial + period * 2)) / 2);
-    Assert.assertTrue(times.get(3) - times.get(2) <= (period * 5 - (initial + period * 2)) * 2);
+    Assert.assertTrue(times.get(3) - times.get(2) >= period * 2 - EPSILON);
+    Assert.assertTrue(times.get(3) - times.get(2) <= period * 3 + EPSILON);
 
     //no pause
-    Assert.assertTrue(times.get(4) - times.get(3) >= period / 2);
-    Assert.assertTrue(times.get(4) - times.get(3) <= period * 2);
+    Assert.assertTrue(times.get(4) - times.get(3) >= period - EPSILON);
+    Assert.assertTrue(times.get(4) - times.get(3) <= period + EPSILON);
     
     //no pause
-    Assert.assertTrue(times.get(5) - times.get(4) >= period / 2);
-    Assert.assertTrue(times.get(5) - times.get(4) <= period * 2);
+    Assert.assertTrue(times.get(5) - times.get(4) >= period - EPSILON);
+    Assert.assertTrue(times.get(5) - times.get(4) <= period + EPSILON);
     
     
     

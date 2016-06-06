@@ -113,7 +113,7 @@ Works exactly like RxJava's interval, but you can pause/resume it any time durin
 ```
 
 <a name="fastslowinterval"/>
-### 2. Fast/Slow Interval
+### 3. Fast/Slow Interval
 
 Interval that can emit in a fast or a slow pace:
 

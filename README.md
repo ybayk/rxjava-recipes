@@ -1,6 +1,6 @@
 # RxJavaRecipes
 
-A small repo with reusable custom operators and utilities on top of RxJava.
+A small repo with reusable custom operators and utilities on top of RxJava 1.+
 It depends only on https://github.com/ReactiveX/RxJava and compatible with Java 6+.
 
 
@@ -31,7 +31,7 @@ and the dependency:
 	<dependency>
 		<groupId>com.github.yurgis2</groupId>
 		<artifactId>rxjava-recipes</artifactId>
-		<version>v0.0.2</version>
+		<version>v0.0.3</version>
 	</dependency>
 ```
 
@@ -43,7 +43,7 @@ and the dependency:
         maven { url "https://jitpack.io" }
    }
    dependencies {
-         compile 'com.github.yurgis2:rxjava-recipes:v0.0.2'
+         compile 'com.github.yurgis2:rxjava-recipes:v0.0.3'
    }
 ```
 

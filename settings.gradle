@@ -1,0 +1,3 @@
+rootProject.name='rxjava-recipes'
+
+include 'rxjava-recipes-guava'

@@ -51,7 +51,7 @@ and the dependency:
 <a name="operatormergesorted"/>
 ### 1. OperatorMergeSorted
 
-This [operator](https://github.com/ybayk/rxjava-recipes/blob/master/src/main/java/yurgis/rxjava/recipes/OperatorMergeSorted.java) is very similar to the standard RxJava's [OperatorMerge](https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/operators/OperatorMerge.java) but its implementation is loosly based on and have the same performance characteristics as [OperatorZip](https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/operators/OperatorZip.java).
+This [operator](https://github.com/ybayk/rxjava-recipes/blob/master/src/main/java/ybayk/rxjava/recipes/OperatorMergeSorted.java) is very similar to the standard RxJava's [OperatorMerge](https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/operators/OperatorMerge.java) but its implementation is loosly based on and have the same performance characteristics as [OperatorZip](https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/operators/OperatorZip.java).
 It merges source Observables into one Observable, but does it in the order specified by the provided comparator (assuming the source Observable's have their items pre-sorted in the order consistent with the comparator). 
 
 This operator supports backpressure which means that:

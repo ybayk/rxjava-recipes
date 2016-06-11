@@ -22,9 +22,6 @@ buildscript {
 repositories {
   jcenter()
   maven {
-    url 'http://clojars.org/repo'
-  }
-  maven {
     url 'https://oss.sonatype.org/content/groups/public'
   }
 }

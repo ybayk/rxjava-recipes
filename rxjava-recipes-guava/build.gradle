@@ -22,9 +22,6 @@ buildscript {
 repositories {
   jcenter()
   maven {
-    url 'http://clojars.org/repo'
-  }
-  maven {
     url 'https://oss.sonatype.org/content/groups/public'
   }
 }
@@ -64,6 +61,13 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
+}
+
+
+// add javadoc/source jar tasks as artifacts
+artifacts {
+	archives sourcesJar
+	//, javadocJar
 }
 
 eclipse {

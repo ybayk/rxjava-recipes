@@ -1,4 +1,4 @@
-package yurgis.rxjava.recipes;
+package ybayk.rxjava.recipes;
 
 import java.util.ArrayList;
 import java.util.Comparator;

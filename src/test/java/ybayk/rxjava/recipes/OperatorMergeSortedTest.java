@@ -1,4 +1,4 @@
-package yurgis.rxjava.recipes;
+package ybayk.rxjava.recipes;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import rx.Observable;
 import rx.internal.util.RxRingBuffer;
+import ybayk.rxjava.recipes.OperatorMergeSorted;
 
 public class OperatorMergeSortedTest {
   

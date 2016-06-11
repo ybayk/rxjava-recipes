@@ -1,4 +1,4 @@
-package yurgis.rxjava.recipes;
+package ybayk.rxjava.recipes;
 
 import java.util.Comparator;
 import java.util.concurrent.TimeUnit;

@@ -1,4 +1,4 @@
-package yurgis.rxjava.recipes;
+package ybayk.rxjava.recipes;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,6 +16,7 @@ import rx.Scheduler;
 import rx.functions.Func1;
 import rx.functions.Func2;
 import rx.schedulers.Schedulers;
+import ybayk.rxjava.recipes.RxRecipes;
 
 public class RxRecipesTest {
 

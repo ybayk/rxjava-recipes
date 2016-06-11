@@ -1,4 +1,4 @@
-package yurgis.rxjava.recipes.guava;
+package ybayk.rxjava.recipes.guava;
 
 import java.util.Iterator;
 import java.util.concurrent.Executor;
@@ -19,8 +19,6 @@ import com.google.common.util.concurrent.MoreExecutors;
 
 /**
  * Utility class to help creating {@link Observable}s from {@link ListenableFuture}s
- * @author yurgis
- *
  */
 public class ListenableFutureToObservable {
   /**

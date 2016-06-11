@@ -64,6 +64,13 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+// add javadoc/source jar tasks as artifacts
+artifacts {
+	archives sourcesJar
+	//, javadocJar
+}
+
+
 eclipse {
     classpath {
         downloadSources = true

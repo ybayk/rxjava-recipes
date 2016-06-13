@@ -12,6 +12,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.junit.Assert;
 import org.junit.Test;
 
+import rx.Observable;
+
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
@@ -28,8 +30,8 @@ public class ListenableFutureToObservableTest {
     CountDownLatch latch = new CountDownLatch(3);
     long start = System.currentTimeMillis();
     AtomicReference<Throwable> error = new AtomicReference<>();
-    ListenableFutureToObservable.fromIterator(future)
-      .subscribe(item->latch.countDown(),e->error.set(e));
+    Observable<Integer> o = ListenableFutureToObservable.fromIterator(future);
+    o.subscribe(item->latch.countDown(),e->error.set(e));
     Assert.assertNull(error.get());
     Assert.assertTrue("should not block", System.currentTimeMillis() - start < 90);
     latch.await(150, TimeUnit.MILLISECONDS);
@@ -42,12 +44,23 @@ public class ListenableFutureToObservableTest {
     Executors.newSingleThreadScheduledExecutor().schedule(()->future.set(iter), 100, TimeUnit.MILLISECONDS);
     CountDownLatch latch = new CountDownLatch(3);
     AtomicReference<String> threadName = new AtomicReference<>();
-    ListenableFutureToObservable.fromIterator(future, executor)
-      .doOnNext(item->threadName.set(Thread.currentThread().getName()))
+    Observable<Integer> o = ListenableFutureToObservable.fromIterator(future, executor);
+    o.doOnNext(item->threadName.set(Thread.currentThread().getName()))
       .subscribe(item->latch.countDown());
     latch.await();
     Assert.assertNotNull(threadName.get());
     Assert.assertEquals("test-fixed-0", threadName.get());
   }
   
+  @Test
+  public void testFromLazyIterator() throws InterruptedException {
+    Iterator<Integer> iter = Arrays.asList(1,2,3).iterator();
+    SettableFuture<Iterator<Integer>> future = SettableFuture.create();
+    Executors.newSingleThreadScheduledExecutor().schedule(()->future.set(iter), 100, TimeUnit.MILLISECONDS);
+    CountDownLatch latch = new CountDownLatch(3);
+    AtomicReference<Throwable> error = new AtomicReference<>();
+    Observable<Integer> o = ListenableFutureToObservable.fromIterator(()->future, executor);
+    o.subscribe(item->latch.countDown(),e->error.set(e));
+    Assert.assertNull(error.get());
+  }
 }

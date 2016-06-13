@@ -54,7 +54,7 @@ public class ListenableFutureToObservable {
    * 
    * @return instance of {@link Observable} that represents a stream of items from the source future iterable
    */
-  public static <T> Observable<T> fromIterable(final ListenableFuture<Iterable<T>> futureIterable) {
+  public static <T> Observable<T> fromIterable(final ListenableFuture<? extends Iterable<T>> futureIterable) {
     return fromIterable(futureIterable, MoreExecutors.sameThreadExecutor());
   }
   
@@ -143,7 +143,7 @@ public class ListenableFutureToObservable {
    * 
    * @return instance of {@link Observable} that represents a stream of items from the source future iterable.
    */
-  public static <T> Observable<T> fromIterable(final ListenableFuture<Iterable<T>> futureIterable,
+  public static <T> Observable<T> fromIterable(final ListenableFuture<? extends Iterable<T>> futureIterable,
       final Executor executor) {
     
     return fromScalar(futureIterable, executor)
@@ -202,7 +202,7 @@ public class ListenableFutureToObservable {
    * The client on observer side can request only a limited number of items (e.g. using {@link Observable#take(int)}
    * or {@link BlockingObservable#getIterator()} (since rxjava 1.0.15)
    * 
-   * @param futureIteratorSupplier
+   * @param futureSupplier
    *          a lazily loaded future iterator
    * @param executor The executor to use for transformation
    * 
@@ -210,10 +210,10 @@ public class ListenableFutureToObservable {
    * 
    * @return instance of {@link Observable} that represents a stream of items from the source future iterable
    */
-  public static <T> Observable<T> fromIterable(final Supplier<ListenableFuture<Iterable<T>>> futureIteratorSupplier,
+  public static <T> Observable<T> fromIterable(final Supplier<ListenableFuture<Iterable<T>>> futureSupplier,
       final Executor executor) {
     
-    return fromScalar(futureIteratorSupplier, executor)
+    return fromScalar(futureSupplier, executor)
         .concatMap(new Func1<Iterable<T>, Observable<T>>() {
 
       @Override

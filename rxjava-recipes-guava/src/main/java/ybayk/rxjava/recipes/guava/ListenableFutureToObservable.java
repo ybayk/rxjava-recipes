@@ -21,7 +21,7 @@ import com.google.common.util.concurrent.MoreExecutors;
  */
 public class ListenableFutureToObservable {
   /**
-   * Converts {@link ListenableFuture} {@link Iterator} into an rx {@link Observable}.
+   * Converts {@link ListenableFuture} of {@link Iterator} into an rx {@link Observable}.
    * <p>
    * Note that by calling this method actual source iterator will not be traversed automatically. 
    * <p>
@@ -29,7 +29,7 @@ public class ListenableFutureToObservable {
    * or {@link BlockingObservable#getIterator()} (since rxjava 1.0.15)
    * 
    * @param futureIterator
-   *          a {@link ListenableFuture} with {@link Iterator}
+   *          a {@link ListenableFuture} of {@link Iterator}
    * 
    * @param <T> target object type
    * 
@@ -40,7 +40,7 @@ public class ListenableFutureToObservable {
   }
 
   /**
-   * Converts {@link ListenableFuture} {@link Iterable} into an rx {@link Observable}.
+   * Converts {@link ListenableFuture} of {@link Iterable} into an rx {@link Observable}.
    * <p>
    * Note that by calling this method actual source iterable will not be traversed automatically. 
    * <p>
@@ -91,7 +91,7 @@ public class ListenableFutureToObservable {
   }
   
   /**
-   * Converts {@link ListenableFuture} iterator into an rx {@link Observable}.
+   * Converts {@link ListenableFuture} of {@link Iterator} into an rx {@link Observable}.
    * <p>
    * Note that by calling this method actual source iterator will not be traversed automatically. 
    * <p>
@@ -128,7 +128,7 @@ public class ListenableFutureToObservable {
   }
 
   /**
-   * Converts {@link ListenableFuture} {@link Iterable} into an rx {@link Observable}.
+   * Converts {@link ListenableFuture} of {@link Iterable} into an rx {@link Observable}.
    * <p>
    * Note that by calling this method actual source iterable will not be traversed automatically. 
    * <p>
@@ -158,11 +158,11 @@ public class ListenableFutureToObservable {
   }
 
   /**
-   * Converts a lazily loaded {@link ListenableFuture} iterator into an rx {@link Observable}.
+   * Converts a lazily loaded {@link ListenableFuture} of {@link Iterator} into an rx {@link Observable}.
    * <p>
    * Note that by calling this method actual source iterator will not be traversed automatically. 
    * <p>
-   * The client on observer side can request only a limited number of items (e.g. using {@link Observable#take(int)}
+   * The client on observer side can request only a limited number of items (e`.g. using {@link Observable#take(int)}
    * or {@link BlockingObservable#getIterator()} (since rxjava 1.0.15)
    * 
    * @param futureIteratorSupplier

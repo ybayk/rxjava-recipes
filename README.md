@@ -1,17 +1,17 @@
-# RxJavaRecipes
+##### Table of Contents  
+[1. RxJavaRecipes Core Utils](#rxjavarecipescore)  
+[1.1. OperatorMergeSorted](#operatormergesorted)  
+[1.2. Pausable Interval](#pausableinterval)  
+[1.3. Fast/Slow Interval](#fastslowinterval)  
+[2. RxJavaRecipes Guava Utils](#rxjavarecipesguava)  
+
+<a name="rxjavarecipescore"/>
+## 1. RxJavaRecipes
 
 A small repo with reusable custom operators and utilities on top of RxJava.
 
 It depends only on https://github.com/ReactiveX/RxJava (1.1.+) and compatible with Java 6+.
 
-
-##### Table of Contents  
-[Set up as a dependency](#setupdependency)  
-[OperatorMergeSorted](#operatormergesorted)  
-[Pausable Interval](#pausableinterval)  
-[Fast/Slow Interval](#fastslowinterval)  
-
-<a name="setupdependency"/>
 ### Include as a depenency to your project
 
 #### Maven
@@ -49,7 +49,7 @@ and the dependency:
 ```
 
 <a name="operatormergesorted"/>
-### 1. OperatorMergeSorted
+### 1.2. OperatorMergeSorted
 
 This [operator](https://github.com/ybayk/rxjava-recipes/blob/master/src/main/java/ybayk/rxjava/recipes/OperatorMergeSorted.java) is very similar to the standard RxJava's [OperatorMerge](https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/operators/OperatorMerge.java) but its implementation is loosly based on and have the same performance characteristics as [OperatorZip](https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/operators/OperatorZip.java).
 It merges source Observables into one Observable, but does it in the order specified by the provided comparator (assuming the source Observable's have their items pre-sorted in the order consistent with the comparator). 
@@ -99,7 +99,7 @@ This operator supports backpressure which means that:
 ```
 
 <a name="pausableinterval"/>
-### 2. Pausable Interval
+### 1.3. Pausable Interval
 
 Works exactly like RxJava's interval, but you can pause/resume it any time during subscription:
 
@@ -132,4 +132,61 @@ Interval that can emit in a fast or a slow pace:
     //...
     fast.set(false); //emit slower
 ```
+
+## 1. RxGuava
+
+A library that helps convert Guava's ListenableFuture to Observable without having to block.
+
+It depends only on https://github.com/ReactiveX/RxJava (1.1.+) and compatible with Java 6+.
+
+### Include as a depenency to your project
+
+#### Maven
+
+To use it in your Maven build add:
+```xml
+  <repositories>
+	<repository>
+	    <id>jitpack.io</id>
+	    <url>https://jitpack.io</url>
+	</repository>
+  </repositories>
+```
+
+and the dependency:
+
+```xml
+	<dependency>
+		<groupId>com.github.ybayk.rxjava-recipes</groupId>
+		<artifactId>rxjava-recipes-guava</artifactId>
+		<version>0.0.6</version>
+	</dependency>
+```
+
+#### Gradle
+
+```groovy
+   repositories { 
+        jcenter()
+        maven { url "https://jitpack.io" }
+   }
+   dependencies {
+         compile 'com.github.ybayk.rxjava-recipes:rxjava-recipes-guava:0.0.6'
+   }
+```
+
+<a name="fromiterator"/>
+### 2.1. RxGuava.fromIterator(...)
+
+TODO
+
+<a name="fromiterable"/>
+### 2.2. RxGuava.fromIterable(...)
+
+TODO
+
+<a name="fromscalar"/>
+### 2.3. RxGuava.fromScalar(...)
+
+TODO
 

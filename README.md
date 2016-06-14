@@ -156,9 +156,10 @@ Possible solutions:
  
 If you switch to Listenable- or CompletableFutures, using the existing Observable.from(java.util.concurrent.Future) is a mistake, because it still executes Future.get() and blocks a thread.
 
-The correct way of building an Observable from ListenableFture is to use the callback:
+The correct way of building an Observable from ListenableFuture is to use the callback:
 
 ```java
+...
 Observable.create(new Observable.OnSubscribe<T>() {
 
       @Override
@@ -221,15 +222,18 @@ and the dependency:
 <a name="fromiterator"/>
 ### 2.1. RxGuava.fromIterator(...)
 
-TODO
+```java
+```
 
 <a name="fromiterable"/>
 ### 2.2. RxGuava.fromIterable(...)
 
-TODO
+```java
+```
 
 <a name="fromscalar"/>
 ### 2.3. RxGuava.fromScalar(...)
 
-TODO
+```java
+```
 

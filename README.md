@@ -16,11 +16,9 @@ The core library depends only on https://github.com/ReactiveX/RxJava (1.1.+) or 
 * [2.3. From Scalar](#fromscalar)  
 
 <a name="rxjavarecipescore"/>
-## 1. RxJavaRecipes
+## 1. RxRecipes
 
-A small repo with reusable custom operators and utilities on top of RxJava.
-
-It depends only on https://github.com/ReactiveX/RxJava (1.1.+) or (1.0.15+) and compatible with Java 6+.
+A core utility library with minimal dependencies.
 
 ### Include as a depenency to your project
 

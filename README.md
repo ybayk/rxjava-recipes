@@ -5,12 +5,12 @@ The core library depends only on https://github.com/ReactiveX/RxJava (1.1+) or (
 
 ##### Table of Contents  
 
-[1. RxRecipes Core Utils](#rxjavarecipescore)  
+[1. RxRecipes - Core Utils](#rxjavarecipescore)  
 * [1.1. OperatorMergeSorted](#operatormergesorted)  
 * [1.2. Pausable Interval](#pausableinterval)  
 * [1.3. Fast/Slow Interval](#fastslowinterval)  
 
-[2. RxGuava ListenableFuture to Observable](#rxjavarecipesguava)  
+[2. RxGuava - ListenableFuture to Observable](#rxjavarecipesguava)  
 * [2.1. From Iterator](#fromiterator)  
 * [2.2. From Iterable](#fromiterable)  
 * [2.3. From Scalar](#fromscalar)  
@@ -144,7 +144,43 @@ Interval that can emit in a fast or a slow pace:
 ## 1. RxGuava
 
 A small library that helps convert Guava's ListenableFuture to Observable without having to block.
-In addition to dependencies listed for the core library it also depends on Guava.
+In addition to dependencies listed for the [Core Utils](#rxjavarecipescore) it also depends on Guava.
+
+While RxJava lets you conveniently create an Observable from a Future via Observable.from(java.util.concurrent.Future), this method atually wastes a thread. It will either block a current thread or allocate a thread from a thread pool you pass via ObserveOn operator.
+If you have a lot of futures to observe you may run into thread pool exhaustion. 
+
+Possible solutions:
+* Get rid of the Java 1.5 Futures in favor of other async abstractions such as callbacks, promises, etc.
+* Switch to Guava's ListenableFuture
+* Switch to Java 8's CompletableFuture
+ 
+If you switch to Listenable- or CompletableFutures, using the existing Observable.from(java.util.concurrent.Future) is a mistake, because it still executes Future.get() and blocks a thread.
+
+The correct way of building an Observable from ListenableFture is to use the callback:
+
+```java
+Observable.create(new Observable.OnSubscribe<T>() {
+
+      @Override
+      public void call(final Subscriber<? super T> subscriber) {
+        final SingleDelayedProducer<T> producer = new SingleDelayedProducer<T>(subscriber);
+        subscriber.setProducer(producer);
+
+        Futures.addCallback(future, new FutureCallback<T>() {
+
+          @Override
+          public void onSuccess(T t) {
+            producer.setValue(t);
+          }
+
+          @Override
+          public void onFailure(Throwable t) {
+            subscriber.onError(t);
+          }
+        }, executor);
+      }
+    })
+```
 
 ### Include as a depenency to your project
 

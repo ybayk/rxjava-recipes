@@ -40,7 +40,7 @@ and the dependency:
 	<dependency>
 		<groupId>com.github.ybayk.rxjava-recipes</groupId>
 		<artifactId>rxjava-recipes</artifactId>
-		<version>0.0.5</version>
+		<version>0.0.7</version>
 	</dependency>
 ```
 
@@ -52,7 +52,7 @@ and the dependency:
         maven { url "https://jitpack.io" }
    }
    dependencies {
-         compile 'com.github.ybayk.rxjava-recipes:rxjava-recipes:0.0.5'
+         compile 'com.github.ybayk.rxjava-recipes:rxjava-recipes:0.0.7'
    }
 ```
 
@@ -166,7 +166,7 @@ and the dependency:
 	<dependency>
 		<groupId>com.github.ybayk.rxjava-recipes</groupId>
 		<artifactId>rxjava-recipes-guava</artifactId>
-		<version>0.0.6</version>
+		<version>0.0.7</version>
 	</dependency>
 ```
 
@@ -178,7 +178,7 @@ and the dependency:
         maven { url "https://jitpack.io" }
    }
    dependencies {
-         compile 'com.github.ybayk.rxjava-recipes:rxjava-recipes-guava:0.0.6'
+         compile 'com.github.ybayk.rxjava-recipes:rxjava-recipes-guava:0.0.7'
    }
 ```
 

@@ -1,12 +1,17 @@
+# RxJavaRecipes
+
+A small repo with set of minimal libraries with reusable custom operators and utilities on top of RxJava.
+The core library depends only on https://github.com/ReactiveX/RxJava (1.1.+) or (1.0.15+) and compatible with Java 6+.
+
 ##### Table of Contents  
-[1. RxJavaRecipes Core Utils](#rxjavarecipescore)  
-[1.1. OperatorMergeSorted](#operatormergesorted)  
-[1.2. Pausable Interval](#pausableinterval)  
-[1.3. Fast/Slow Interval](#fastslowinterval)  
-[2. RxJavaRecipes Guava Utils](#rxjavarecipesguava)  
-[2.1. From Iterator](#fromiterator)  
-[2.2. From Iterable](#fromiterable)  
-[2.3. From Scalae](#fromscalar)  
+[1. RxRecipes Core Utils](#rxjavarecipescore)  
+[* 1.1. OperatorMergeSorted](#operatormergesorted)  
+[* 1.2. Pausable Interval](#pausableinterval)  
+[* 1.3. Fast/Slow Interval](#fastslowinterval)  
+[2. RxGuava ListenableFuture to Observable](#rxjavarecipesguava)  
+[* 2.1. From Iterator](#fromiterator)  
+[* 2.2. From Iterable](#fromiterable)  
+[* 2.3. From Scalar](#fromscalar)  
 
 <a name="rxjavarecipescore"/>
 ## 1. RxJavaRecipes

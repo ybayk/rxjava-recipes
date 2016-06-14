@@ -19,7 +19,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 /**
  * Utility class to help creating {@link Observable}s from {@link ListenableFuture}s
  */
-public class ListenableFutureToObservable {
+public class RxGuava {
   /**
    * Converts {@link ListenableFuture} of {@link Iterator} into an rx {@link Observable}.
    * <p>

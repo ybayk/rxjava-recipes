@@ -222,30 +222,62 @@ and the dependency:
 <a name="fromiterator"/>
 ### 2.1. RxGuava.fromIterator(...)
 
-Create observable from iterator future:
+Create observable from an iterator future:
 ```java
-    ListenableFuture<Iterator<Integer>> future = someAsyncService.query(...);
-    Observable<Integer> o = RxGuava.fromIterator(future);
+    ListenableFuture<Iterator<MyItem>> future = someAsyncService.query(...);
+    Observable<MyItem> o = RxGuava.fromIterator(future);
 ```
     
-Create observable from iterator future using a custom executor to handle future's callback
+Create observable from an iterator future using a custom executor to handle future's callback
 ```java
-    ListenableFuture<Iterator<Integer>> future = someAsyncService.query(...);
+    ListenableFuture<Iterator<MyItem>> future = someAsyncService.query(...);
     Executor executor = ...
-    Observable<Integer> o = RxGuava.fromIterator(future, executor);
+    Observable<MyItem> o = RxGuava.fromIterator(future, executor);
 ```
     
-Create observable from lazy iterator future. The lazy future means it will not be evaluated until the Observable is subscribed.
+Create observable from a lazy iterator future. The lazy future means it will not be evaluated until the Observable is subscribed:
 ```java
-    Observable<Integer> o = RxGuava.fromIterator(()->someAsyncService.query(...), future);
+    Observable<MyItem> o = RxGuava.fromIterator(()->someAsyncService.query(...), future);
 ```
 
 <a name="fromiterable"/>
 ### 2.2. RxGuava.fromIterable(...)
 
-TODO
+Create observable from an iterable future:
+```java
+    ListenableFuture<List<MyItem>> future = someAsyncService.query(...);
+    Observable<MyItem> o = RxGuava.fromIterable(future);
+```
+    
+Create observable from an iterable future using a custom executor to handle future's callback
+```java
+    ListenableFuture<List<MyItem>> future = someAsyncService.query(...);
+    Executor executor = ...
+    Observable<MyItem> o = RxGuava.fromIterator(future, executor);
+```
+    
+Create observable from a lazy iterable future. The lazy future means it will not be evaluated until the Observable is subscribed:
+```java
+    Observable<MyItem> o = RxGuava.fromIterator(()->someAsyncService.query(...), future);
+```
 
 <a name="fromscalar"/>
 ### 2.3. RxGuava.fromScalar(...)
 
-TODO
+Create single item observable from a future:
+```java
+    ListenableFuture<MyItem> future = someAsyncService.query(...);
+    Observable<MyItem> o = RxGuava.fromIterable(future);
+```
+    
+Create single observable from a future using a custom executor to handle future's callback
+```java
+    ListenableFuture<MyItem> future = someAsyncService.query(...);
+    Executor executor = ...
+    Observable<MyItem> o = RxGuava.fromIterator(future, executor);
+```
+    
+Create observable from a lazy future. The lazy future means it will not be evaluated until the Observable is subscribed:
+```java
+    Observable<MyItem> o = RxGuava.fromIterator(()->someAsyncService.query(...), future);
+```

@@ -5,13 +5,13 @@ The core library depends only on https://github.com/ReactiveX/RxJava (1.1.+) or 
 
 ##### Table of Contents  
 [1. RxRecipes Core Utils](#rxjavarecipescore)  
-[* 1.1. OperatorMergeSorted](#operatormergesorted)  
-[* 1.2. Pausable Interval](#pausableinterval)  
-[* 1.3. Fast/Slow Interval](#fastslowinterval)  
+* [1.1. OperatorMergeSorted](#operatormergesorted)  
+* [1.2. Pausable Interval](#pausableinterval)  
+* [1.3. Fast/Slow Interval](#fastslowinterval)  
 [2. RxGuava ListenableFuture to Observable](#rxjavarecipesguava)  
-[* 2.1. From Iterator](#fromiterator)  
-[* 2.2. From Iterable](#fromiterable)  
-[* 2.3. From Scalar](#fromscalar)  
+* [2.1. From Iterator](#fromiterator)  
+* [2.2. From Iterable](#fromiterable)  
+* [2.3. From Scalar](#fromscalar)  
 
 <a name="rxjavarecipescore"/>
 ## 1. RxJavaRecipes

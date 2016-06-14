@@ -4,13 +4,16 @@
 [1.2. Pausable Interval](#pausableinterval)  
 [1.3. Fast/Slow Interval](#fastslowinterval)  
 [2. RxJavaRecipes Guava Utils](#rxjavarecipesguava)  
+[2.1. From Iterator](#fromiterator)  
+[2.2. From Iterable](#fromiterable)  
+[2.3. From Scalae](#fromscalar)  
 
 <a name="rxjavarecipescore"/>
 ## 1. RxJavaRecipes
 
 A small repo with reusable custom operators and utilities on top of RxJava.
 
-It depends only on https://github.com/ReactiveX/RxJava (1.1.+) and compatible with Java 6+.
+It depends only on https://github.com/ReactiveX/RxJava (1.1.+) or (1.0.15+) and compatible with Java 6+.
 
 ### Include as a depenency to your project
 
@@ -135,9 +138,8 @@ Interval that can emit in a fast or a slow pace:
 
 ## 1. RxGuava
 
-A library that helps convert Guava's ListenableFuture to Observable without having to block.
-
-It depends only on https://github.com/ReactiveX/RxJava (1.1.+) and compatible with Java 6+.
+A small library that helps convert Guava's ListenableFuture to Observable without having to block.
+In addition to dependencies listed for the core library it also depends on Guava.
 
 ### Include as a depenency to your project
 

@@ -77,7 +77,7 @@ public class RxGuava {
         .flatMap(new Func1<Iterator<T>, Observable<T>>() {
 
           @Override
-          public Observable<T> call(Iterator<T> t) {
+          public Observable<T> call(final Iterator<T> t) {
             return Observable.from(new Iterable<T>() {
 
               @Override

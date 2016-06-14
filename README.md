@@ -222,18 +222,30 @@ and the dependency:
 <a name="fromiterator"/>
 ### 2.1. RxGuava.fromIterator(...)
 
+Create observable from iterator future:
 ```java
+    ListenableFuture<Iterator<Integer>> future = someAsyncService.query(...);
+    Observable<Integer> o = RxGuava.fromIterator(future);
+```
+    
+Create observable from iterator future using a custom executor to handle future's callback
+```java
+    ListenableFuture<Iterator<Integer>> future = someAsyncService.query(...);
+    Executor executor = ...
+    Observable<Integer> o = RxGuava.fromIterator(future, executor);
+```
+    
+Create observable from lazy iterator future. The lazy future means it will not be evaluated until the Observable is subscribed.
+```java
+    Observable<Integer> o = RxGuava.fromIterator(()->someAsyncService.query(...), future);
 ```
 
 <a name="fromiterable"/>
 ### 2.2. RxGuava.fromIterable(...)
 
-```java
-```
+TODO
 
 <a name="fromscalar"/>
 ### 2.3. RxGuava.fromScalar(...)
 
-```java
-```
-
+TODO

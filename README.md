@@ -1,7 +1,7 @@
 # RxJavaRecipes
 
-A small repo with set of minimal libraries with reusable custom operators and utilities on top of RxJava.
-The core library depends only on https://github.com/ReactiveX/RxJava (1.1.+) or (1.0.15+) and compatible with Java 6+.
+A small repo with a set of minimal libraries with reusable custom operators and utilities on top of RxJava.
+The core library depends only on https://github.com/ReactiveX/RxJava (1.1+) or (1.0.15+) and compatible with Java 6+.
 
 ##### Table of Contents  
 

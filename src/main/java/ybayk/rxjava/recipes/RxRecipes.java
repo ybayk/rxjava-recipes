@@ -3,7 +3,6 @@ package ybayk.rxjava.recipes;
 import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
 
 import rx.Observable;
 import rx.Scheduler;
@@ -31,7 +30,7 @@ public class RxRecipes {
    * @return an {@link Observable} that emits items {@linkplain Comparable}
    *         natural ordering.
    */
-  public static <T> Observable<T> mergeSorted(Observable<T> o1, Observable<T> o2) {
+  public static <T> Observable<T> mergeSorted(Observable<? extends T> o1, Observable<? extends T> o2) {
     return Observable.just(o1, o2).lift(new OperatorMergeSorted<T>());
   }
 
@@ -75,7 +74,8 @@ public class RxRecipes {
    * @return an {@link Observable} that emits items {@linkplain Comparable}
    *         natural ordering.
    */
-  public static <T> Observable<T> mergeSorted(Observable<T> o1, Observable<T> o2, Observable<T> o3, Observable<T> o4) {
+  public static <T> Observable<T> mergeSorted(Observable<? extends T> o1, Observable<? extends T> o2, 
+      Observable<? extends T> o3, Observable<? extends T> o4) {
     return Observable.just(o1, o2, o3, o4).lift(new OperatorMergeSorted<T>());
   }
 
@@ -92,7 +92,7 @@ public class RxRecipes {
    * @return an {@link Observable} that emits items {@linkplain Comparable}
    *         natural ordering.
    */
-  public static <T> Observable<T> mergeSorted(Observable<Observable<T>> sources) {
+  public static <T> Observable<T> mergeSorted(Observable<Observable<? extends T>> sources) {
     return sources.lift(new OperatorMergeSorted<T>());
   }
 
@@ -113,7 +113,8 @@ public class RxRecipes {
    * @return an {@link Observable} that emits items ordered by the specified
    *         {@code comparator}.
    */
-  public static <T> Observable<T> mergeSorted(Observable<T> o1, Observable<T> o2, Comparator<T> comparator) {
+  public static <T> Observable<T> mergeSorted(Observable<? extends T> o1, Observable<? extends T> o2, 
+      Comparator<T> comparator) {
     return Observable.just(o1, o2).lift(new OperatorMergeSorted<T>(comparator));
   }
 
@@ -136,7 +137,7 @@ public class RxRecipes {
    * @return an {@link Observable} that emits items ordered by the specified
    *         {@code comparator}.
    */
-  public static <T> Observable<T> mergeSorted(Observable<T> o1, Observable<T> o2, Observable<T> o3,
+  public static <T> Observable<T> mergeSorted(Observable<? extends T> o1, Observable<? extends T> o2, Observable<? extends T> o3,
       Comparator<T> comparator) {
     return Observable.just(o1, o2, o3).lift(new OperatorMergeSorted<T>(comparator));
   }
@@ -162,7 +163,8 @@ public class RxRecipes {
    * @return an {@link Observable} that emits items ordered by the specified
    *         {@code comparator}.
    */
-  public static <T> Observable<T> mergeSorted(Observable<T> o1, Observable<T> o2, Observable<T> o3, Observable<T> o4,
+  public static <T> Observable<T> mergeSorted(Observable<? extends T> o1, Observable<? extends T> o2, 
+      Observable<? extends T> o3, Observable<? extends T> o4,
       Comparator<T> comparator) {
     return Observable.just(o1, o2, o3, o4).lift(new OperatorMergeSorted<T>(comparator));
   }
@@ -182,7 +184,7 @@ public class RxRecipes {
    * @return an {@link Observable} that emits items ordered by the specified
    *         {@code comparator}.
    */
-  public static <T> Observable<T> mergeSorted(Observable<Observable<T>> sources, Comparator<T> comparator) {
+  public static <T> Observable<T> mergeSorted(Observable<Observable<? extends T>> sources, Comparator<T> comparator) {
     return sources.lift(new OperatorMergeSorted<T>(comparator));
   }
 
